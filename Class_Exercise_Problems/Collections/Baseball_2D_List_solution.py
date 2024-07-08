@@ -21,8 +21,8 @@ def print_menu():
     print('2 - Add Player')
     print('3 - Remove Player')
     print('4 - Move Player')
-    print('5 - Edit PLayer position')
-    print('6 - Edit PLayer stats')
+    print('5 - Edit Player position')
+    print('6 - Edit Player stats')
     print('7 - Exit Program\n')
 
 
@@ -81,6 +81,15 @@ def batting_average(at_bats, hits):
     return hits/at_bats
 
 
+def get_lineup_number(collection, prompt):
+    while True:
+        lineup_number = int(input(prompt))
+        if lineup_number < 1 or lineup_number > len(collection):
+            print('Invalid lineup number. Please try again.')
+        else:
+            return lineup_number
+
+
 def add_player(collection):
     player_name = input('Name: ').title()
     player_position = get_player_position()
@@ -99,7 +108,7 @@ def add_player(collection):
 
 def display_players(collection):
     if collection == None:
-        print("There are no players in the lineup.")
+        print("There are no players in the lineup.\n")
     else:
         print("\tPlayer\t\tPOS\tAB\tH\tAVG")
         seperator('-')
@@ -109,7 +118,48 @@ def display_players(collection):
             at_bats = player[2]
             hits = player[3]
             avg = batting_average(at_bats, hits)
-            print(f'{i}\t{name[:4]}\t\t{position}\t{at_bats}\t{hits}\t{avg:.2f}')
+            print(f'{i}\t{name[:3]}\t\t\t{position}\t{at_bats}\t{hits}\t{avg:.2f}')
+        print()
+
+
+def remove_player(collection):
+    player_number = get_lineup_number(collection, 'Player Number: ')
+    player = collection.pop(player_number - 1)
+    print(f"{player[0]} was removed.\n")
+
+
+def move_player(collection):
+    old_number = get_lineup_number(collection, "Current Lineup Number: ")
+    player = collection.pop(old_number - 1)
+    print(f"{player[0]} was selected.")
+    
+    new_number = get_lineup_number(collection, "New Lineup Number: ")
+    collection.insert(new_number-1, player)
+    print(f"{player[0]} was moved.\n")
+    
+
+def edit_player_position(collection):
+    number = get_lineup_number(collection, "Lineup Number: ")
+    player = collection[number-1]
+    print(f"You selected {player[0]} POS={player[1]}")
+    
+    position = get_player_position()
+    player[1] = position
+    print(f"{player[0]} was updated.\n")
+
+
+def edit_player_stats(collection):
+    number = get_lineup_number(collection, "Lineup Number: ")
+    player = collection[number-1]
+    print(f"You selected {player[0]} AB={player[2]} H={player[3]}")
+    
+    ab = get_at_bats()
+    h = get_hits(ab)
+    
+    player[2] = ab
+    player[3] = h
+    
+    print(f"{player[0]} was updated.\n")
 
 
 def main():
@@ -118,7 +168,32 @@ def main():
     print_menu()
     print_positions()
     seperator()
-
+    
+    players_list = [['Joe', 'P', 10, 2],
+                    ['Tom', 'SS', 11, 4],
+                    ['Ben', 'C', 4, 1]]
+    while True:
+        option = int(input("Menu option: "))
+        
+        if option == 1:
+            display_players(players_list)
+        elif option == 2:
+            add_player(players_list)
+        elif option == 3:
+            remove_player(players_list)
+        elif option == 4:
+            move_player(players_list)
+        elif option == 5:
+            edit_player_position(players_list)
+        elif option == 6:
+            edit_player_stats(players_list)
+        elif option == 7:
+            print("Bye!")
+            break
+        else:
+            print('Invalid option selected. Try again.')
+            print_menu()
+    
 
 if __name__ == '__main__':
     main()

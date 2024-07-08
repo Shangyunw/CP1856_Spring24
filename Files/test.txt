@@ -1,0 +1,2 @@
+This is appending to file using 'with'.
+This is the actual append operation.
