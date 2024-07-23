@@ -58,9 +58,3 @@ except Exception as e:
     print("An unexpected error happend. Here is the details:")
     print(e)
 print("I am still executing")
-
-=======
-except Exception as e:
-    print("You entered an invalid integer. Please try again.")
-print("End of program")
-
